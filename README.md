@@ -22,19 +22,19 @@ TUTORIAL SUMMARY
 
 On the next videos we will learn everything in order to make it work.
 
--Chapter 1: Setting up the Raspberry PI:
+-Chapter 1: Setting up the Raspberry PI-
 	
 	Here we will install all the necessary hardware and software on the Raspberry PI side in order for the project to work.
 
--Chapter 2: Setting up the servers for the app to work:
+-Chapter 2: Setting up the servers for the app to work-
 
 	We will install our command server that will manage the requests from the app to the drone and we will see how to set up our streaming server to get the video feed.
 	
--Chapter 3: Understanding the app:
+-Chapter 3: Understanding the app:-
 
 	Here we will see the necessary steps we have to do in order to run the app and use it to control the drone.
 
--Chapter 4: Understanding Python controller:
+-Chapter 4: Understanding Python controller-
 
 	In this tutorial we will run the Python scripts in Raspberry PI that will communicate directly with the drone.
 
