@@ -2,7 +2,7 @@
 REMOTE DRONE CONTROLLER: APPS
 ----------------
 
-Here are the app used for the project:
+Here are the app used for the project. [Video tutorial](https://www.youtube.com/watch?v=ag0HZh6rDmM):
 
 * **RemoteDroneController_Android.apk:** APK to be used on Android smartphone or tablet devices	
 
