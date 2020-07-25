@@ -2,7 +2,7 @@
 REMOTE DRONE CONTROLLER: COMMAND SERVER
 ----------------
 
-We will install our command server that will manage the requests from the app to the drone and we will see how to set up our streaming server to get the video feed.
+We will install our command server that will manage the requests from the app to the drone and we will see how to set up our streaming server to get the video feed. [Video tutorial](https://www.youtube.com/watch?v=C6Iw0IzKYbQ)
 
 ----------
 REFERENCES
