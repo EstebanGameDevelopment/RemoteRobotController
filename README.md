@@ -22,7 +22,7 @@ TUTORIAL SUMMARY
 
 On the next videos we will learn everything in order to make it work.
 
-* **Chapter 1: Setting up the Raspberry PI:** Here we will install all the necessary hardware and software on the Raspberry PI side 	in order for the project to work.
+* **Chapter 1: Setting up the Raspberry PI:** Here we will install all the necessary hardware and software on the Raspberry PI side in order for the project to work.
 
 * **Chapter 2: Setting up the servers for the app to work:** We will install our command server that will manage the requests from the app to the drone and we will see how to set up our streaming server to get the video feed.
 	
@@ -38,49 +38,27 @@ I will be focusing to explain specifically about this project, so there will be 
 I will put all these references and video tutorials in the description for you to follow.
 
 * **Chapter 1: Setting up the Raspberry PI**
-
-..* *Installation of Raspbian:* https://www.youtube.com/watch?v=M26GYJzblEY
-
-..* *Enable SSH on Raspbian:* https://youtu.be/RgUM8ulMfHE
-
-..* *Download WinSCP:*	https://winscp.net/eng/download.php
-
-..* *How to use WinSCP:* https://youtu.be/WIOpNuQc068
-
-..* *Installation of RaspiCam:*	https://www.youtube.com/watch?v=iLHij-mQVF4
-
-..* *iRobot Create2 Video tutorial as a reference:* https://youtu.be/ItZw1eZNjJE
-
-..* *Install OpenCV:* https://www.youtube.com/watch?v=QV1a1G4lL3U
-
-..* *Sensor BerryIMU:* https://ozzmaker.com/berryimu-quick-start-guide/
+	- *Installation of Raspbian:* https://www.youtube.com/watch?v=M26GYJzblEY
+	- *Enable SSH on Raspbian:* https://youtu.be/RgUM8ulMfHE
+	- *Download WinSCP:*	https://winscp.net/eng/download.php
+	- *How to use WinSCP:* https://youtu.be/WIOpNuQc068
+	- *Installation of RaspiCam:*	https://www.youtube.com/watch?v=iLHij-mQVF4
+	- *iRobot Create2 Video tutorial as a reference:* https://youtu.be/ItZw1eZNjJE
+	- *Install OpenCV:* https://www.youtube.com/watch?v=QV1a1G4lL3U
+	- *Sensor BerryIMU:* https://ozzmaker.com/berryimu-quick-start-guide/
 
 * **Chapter 2: Setting up the servers for the app to work**
-
-	Hosting cloud services:
-	https://www.digitalocean.com/
-
-	Installation of RTMP server:
-	https://obsproject.com/forum/resources/how-to-set-up-your-own-private-rtmp-server-using-nginx.50/
-
-	360 CAMERAS:
-	https://www.insta360.com/
+	- *Hosting cloud services:* https://www.digitalocean.com/
+	- *Installation of RTMP server:* https://obsproject.com/forum/resources/how-to-set-up-your-own-private-rtmp-server-using-nginx.50/
+	- *360 CAMERAS:* https://www.insta360.com/
 	
 
--Chapter 3: Understanding the app-
-	
-	Install APK from Unknown sources:
-	https://www.youtube.com/watch?v=AwzdF3vXu04
-
-	Sideload APK on Quest:
-	https://youtu.be/nlflUCGOuHo
-
-	ADB Minimal:
-	https://androidmtk.com/download-minimal-adb-and-fastboot-tool
+* **Chapter 3: Understanding the app**
+	- *Install APK from Unknown sources:* https://www.youtube.com/watch?v=AwzdF3vXu04
+	- *Sideload APK on Quest*: https://youtu.be/nlflUCGOuHo
+	- *ADB Minimal*: https://androidmtk.com/download-minimal-adb-and-fastboot-tool
 
 
--Chapter 4: Understanding Python controller
-
-	OpenCV (Image processing):
-	https://opencv.org/
+* **Chapter 4: Understanding Python controller**
+	- *OpenCV (Image processing)*:	https://opencv.org/
 
