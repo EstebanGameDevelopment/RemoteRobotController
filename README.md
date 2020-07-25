@@ -6,6 +6,8 @@ With the project Remote Drone Controller you will be able to control any drone r
 
 We are going to do, step by step, everything in order for anyone who is familiar with Raspberry PI and drones to do his own remote drone controller system.
 
+[Project presentation video](https://www.youtube.com/watch?v=yUAq1P1o_M0)
+
 ----------------
 CONTENTS
 ----------------
@@ -33,13 +35,13 @@ TUTORIAL SUMMARY
 
 On the next videos we will learn everything in order to make it work.
 
-* **Chapter 1: Setting up the Raspberry PI:** Here we will install all the necessary hardware and software on the Raspberry PI side in order for the project to work.
+* **[Chapter 1: Setting up the Raspberry PI](https://www.youtube.com/watch?v=pNlp3vxBs1U):** Here we will install all the necessary hardware and software on the Raspberry PI side in order for the project to work.
 
-* **Chapter 2: Setting up the servers for the app to work:** We will install our command server that will manage the requests from the app to the drone and we will see how to set up our streaming server to get the video feed.
+* **[Chapter 2: Setting up the servers for the app to work](https://www.youtube.com/watch?v=C6Iw0IzKYbQ):** We will install our command server that will manage the requests from the app to the drone and we will see how to set up our streaming server to get the video feed.
 	
-* **Chapter 3: Understanding the app:** Here we will see the necessary steps we have to do in order to run the app and use it to control the drone.
+* **[Chapter 3: Understanding the app](https://www.youtube.com/watch?v=ag0HZh6rDmM):** Here we will see the necessary steps we have to do in order to run the app and use it to control the drone.
 
-* **Chapter 4: Understanding Python controller:** In this tutorial we will run the Python scripts in Raspberry PI that will communicate directly with the drone.
+* **[Chapter 4: Understanding Python controller](https://www.youtube.com/watch?v=Y4urGfT6mmU):** In this tutorial we will run the Python scripts in Raspberry PI that will communicate directly with the drone.
 
 ------------------
 ADDITIONAL RESOURCES
