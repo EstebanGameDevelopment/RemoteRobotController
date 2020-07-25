@@ -46,7 +46,7 @@ On the next videos we will learn everything in order to make it work.
 ADDITIONAL RESOURCES
 ------------------
 
-	I will be focusing to explain specifically about this project, so there will be parts that won't be explained in greater detail because there are better explanations out there. 
+I will be focusing to explain specifically about this project, so there will be parts that won't be explained in greater detail because there are better explanations out there. 
 I will put all these references and video tutorials in the description for you to follow.
 
 -Chapter 1: Setting up the Raspberry PI-
