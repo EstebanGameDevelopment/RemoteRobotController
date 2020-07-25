@@ -3,6 +3,10 @@ REMOTE DRONE CONTROLLER: PYTHON CONTROLLER
 
 Python scripts in Raspberry PI that will communicate directly with the drone.
 
+* [Videotutorial Raspberry Basic Installation](https://www.youtube.com/watch?v=pNlp3vxBs1U)
+
+* [Videotutorial Run Python Scripts](https://www.youtube.com/watch?v=Y4urGfT6mmU)
+
 
 SECTIONS
 ---------
