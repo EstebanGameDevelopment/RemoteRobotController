@@ -51,8 +51,7 @@ I will put all these references and video tutorials in the description for you t
 
 -Chapter 1: Setting up the Raspberry PI-
 
-	Installation of Raspbian:
-	https://www.youtube.com/watch?v=M26GYJzblEY
+	[Installation of Raspbian](https://www.youtube.com/watch?v=M26GYJzblEY)
 
 	Enable SSH on Raspbian:
 	https://youtu.be/RgUM8ulMfHE
