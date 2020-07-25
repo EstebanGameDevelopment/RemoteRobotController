@@ -7,6 +7,17 @@ With the project Remote Drone Controller you will be able to control any drone r
 We are going to do, step by step, everything in order for anyone who is familiar with Raspberry PI and drones to do his own remote drone controller system.
 
 ----------------
+CONTENTS
+----------------
+The 3 folders of the project contain:
+
+* **/Apps**: APK apps for Android based devices (Smartphones/tablets, Oculus Go, Oculus Quest)
+
+* **/CommandServer**: Binary server that will connect the all the involved actors through mobile network.
+
+* **/PythonRobot**: Python scripts that will connect the robot with the app.
+
+----------------
 PROJECT'S GOAL
 ----------------
 
