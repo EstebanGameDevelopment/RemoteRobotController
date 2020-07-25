@@ -22,13 +22,13 @@ TUTORIAL SUMMARY
 
 On the next videos we will learn everything in order to make it work.
 
-* Chapter 1: Setting up the Raspberry PI:Here we will install all the necessary hardware and software on the Raspberry PI side 	in order for the project to work.
+* **Chapter 1: Setting up the Raspberry PI:** Here we will install all the necessary hardware and software on the Raspberry PI side 	in order for the project to work.
 
-* Chapter 2: Setting up the servers for the app to work: We will install our command server that will manage the requests from the app to the drone and we will see how to set up our streaming server to get the video feed.
+* **Chapter 2: Setting up the servers for the app to work:** We will install our command server that will manage the requests from the app to the drone and we will see how to set up our streaming server to get the video feed.
 	
-* Chapter 3: Understanding the app: Here we will see the necessary steps we have to do in order to run the app and use it to control the drone.
+* **Chapter 3: Understanding the app:** Here we will see the necessary steps we have to do in order to run the app and use it to control the drone.
 
-* Chapter 4: Understanding Python controller: In this tutorial we will run the Python scripts in Raspberry PI that will communicate directly with the drone.
+* **Chapter 4: Understanding Python controller:** In this tutorial we will run the Python scripts in Raspberry PI that will communicate directly with the drone.
 
 ------------------
 ADDITIONAL RESOURCES
@@ -37,32 +37,25 @@ ADDITIONAL RESOURCES
 I will be focusing to explain specifically about this project, so there will be parts that won't be explained in greater detail because there are better explanations out there. 
 I will put all these references and video tutorials in the description for you to follow.
 
--Chapter 1: Setting up the Raspberry PI-
+* **Chapter 1: Setting up the Raspberry PI**
 
-	<a href="https://www.youtube.com/watch?v=M26GYJzblEY">Installation of Raspbian</a>
+..* *Installation of Raspbian:* https://www.youtube.com/watch?v=M26GYJzblEY
 
-	Enable SSH on Raspbian:
-	https://youtu.be/RgUM8ulMfHE
+..* *Enable SSH on Raspbian:* https://youtu.be/RgUM8ulMfHE
 
-	Download WinSCP:
-	https://winscp.net/eng/download.php
+..* *Download WinSCP:*	https://winscp.net/eng/download.php
 
-	How to use WinSCP:
-	https://youtu.be/WIOpNuQc068
+..* *How to use WinSCP:* https://youtu.be/WIOpNuQc068
 
-	Installation of RaspiCam:
-	https://www.youtube.com/watch?v=iLHij-mQVF4
+..* *Installation of RaspiCam:*	https://www.youtube.com/watch?v=iLHij-mQVF4
 
-	iRobot Create2 Video tutorial as a reference:
-	https://youtu.be/ItZw1eZNjJE
+..* *iRobot Create2 Video tutorial as a reference:* https://youtu.be/ItZw1eZNjJE
 
-	Install OpenCV:
-	https://www.youtube.com/watch?v=QV1a1G4lL3U
+..* *Install OpenCV:* https://www.youtube.com/watch?v=QV1a1G4lL3U
 
-	Sensor BerryIMU:
-	https://ozzmaker.com/berryimu-quick-start-guide/
+..* *Sensor BerryIMU:* https://ozzmaker.com/berryimu-quick-start-guide/
 
--Chapter 2: Setting up the servers for the app to work-
+* **Chapter 2: Setting up the servers for the app to work**
 
 	Hosting cloud services:
 	https://www.digitalocean.com/
