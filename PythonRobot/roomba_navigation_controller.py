@@ -173,7 +173,6 @@ def message_received(client, server, message):
 		global berryIMUsensor
 		global irobotcontroller
 		global g_distanceFromCenter
-		global g_distanceFromCenter
 		global g_targetAngle
 		global g_reportReachedTarget
 		global g_displayOneTimeMessage

@@ -22,7 +22,7 @@ import sys, glob # for listing serial ports.
 import os  # to command the mp3 and wav player omxplayer*
 
 # IRobot Controller
-from robotcontroller.irobot_controller import IRobotController
+from dronecontroller.idrone_controller import IDroneController
 
 ##########################################################################
 ##########################################################################
@@ -32,7 +32,9 @@ from robotcontroller.irobot_controller import IRobotController
 
 STATE_DISCONNECTED = -2
 STATE_IDLE = -1
-STATE_FREE_CONTROL = 1
+STATE_ROTATE_TO_ANGLE = 0
+STATE_GO_TO_TARGET = 1
+STATE_FREE_CONTROL = 2
 
 g_distanceFromCenter = 0.05
 g_targetAngle = 100001
@@ -50,11 +52,15 @@ g_accuracy_angle = 25
 g_iterator_surpass = 5
 g_last_direction_rotation = True
 g_sign_diference_last_rotation = 0
+g_targetLatitude = 0
+g_targetLongitude = 0
 
 def initilitzationSystem():
 	global STATE_DISCONNECTED
 	global g_distanceFromCenter
 	global g_targetAngle
+	global g_targetLatitude
+	global g_targetLongitude
 	global g_reportReachedTarget
 	global g_displayOneTimeMessage
 	global g_previousTimeNow
@@ -79,9 +85,13 @@ def initilitzationSystem():
 	g_checkWhatColor = True
 	g_error_range = 15
 	g_accuracy_angle = 25
+	g_targetLatitude = 0
+	g_targetLongitude = 0
 
-def changeStateRobot(newState, angleGoal):
+def changeStateRobot(newState, angleGoal, latitude, longitude):
 	global g_targetAngle
+	global g_targetLatitude
+	global g_targetLongitude
 	global g_previousTimeNow
 	global g_currentIterations
 	global g_timeAcumToRunAction
@@ -91,6 +101,8 @@ def changeStateRobot(newState, angleGoal):
 	global g_iterator_surpass
 	global STATE_DISCONNECTED
 	global STATE_IDLE
+	global STATE_ROTATE_TO_ANGLE
+	global STATE_GO_TO_TARGET
 	global STATE_FREE_CONTROL
 	g_stateRoombaTarget = newState
 	g_currentIterations = 0
@@ -100,6 +112,21 @@ def changeStateRobot(newState, angleGoal):
 	if g_stateRoombaTarget == STATE_IDLE:
 		g_targetAngle = 100001
 		print ('**CHANGE STATE: STATE_IDLE')
+	if g_stateRoombaTarget == STATE_ROTATE_TO_ANGLE:
+		#NAVIGATION	-	RASPBERRY
+		#0+180			-	200/180
+		#270+180%360	-	110/90
+		#180+180%360	-	20/0
+		#90+180%360		- 	300/270
+		g_targetAngle = angleGoal
+		g_targetLatitude = latitude
+		g_targetLatitude = longitude
+		output = "**CHANGE STATE: ANGLE=%d, LATITUDE=%d, LONGITUDE=%d" % (g_targetAngle, g_targetLatitude, g_targetLatitude)
+		g_iterator_surpass = 7
+		print (output)
+	if g_stateRoombaTarget == STATE_GO_TO_TARGET:
+		g_targetAngle = 100001
+		print ('**CHANGE STATE: STATE_GO_TO_TARGET')
 	if g_stateRoombaTarget == STATE_FREE_CONTROL:
 		g_targetAngle = 100001
 		print ('**CHANGE STATE: STATE_FREE_CONTROL')
@@ -135,10 +162,11 @@ def new_client(client, server):
 		changeStateRobot(STATE_IDLE, 100001)
 		server.send_message_to_all("Client connected")
 def message_received(client, server, message):
-		global berryIMUsensor
 		global irobotcontroller
 		global g_distanceFromCenter
 		global g_targetAngle
+		global g_targetLatitude
+		global g_targetLongitude
 		global g_reportReachedTarget
 		global g_displayOneTimeMessage
 		global g_previousTimeNow
@@ -146,6 +174,7 @@ def message_received(client, server, message):
 		global g_isRedWaypoint
 		global g_stateRoombaTarget
 		global STATE_IDLE
+		global STATE_ROTATE_TO_ANGLE
 		global STATE_GO_TO_TARGET
 		global STATE_FREE_CONTROL
 		if len(message) > 200:
@@ -159,49 +188,57 @@ def message_received(client, server, message):
 		if postime > 0 and vend > 0: 
 			time_sleep = float(message[postime+6:vend])
 			print('time_sleep is', time_sleep, '!!!!!!!!!')
+		if "setTarget" in message:
+			if g_reportReachedTarget is True:
+				g_reportReachedTarget = False
+				g_targetAngle = 100001
+				print ('')
+				print ('++++REPORTING CHANGE TO NEXT GPS')
+				server.send_message_to_all("targetangle_success")
+			else:
+				posangle = message.find("_gps_")
+				vend = message.find("_end")
+				if g_targetAngle > 100000 and posangle > 0 and vend > 0 and (g_stateRoombaTarget == STATE_IDLE or g_stateRoombaTarget == STATE_FREE_CONTROL):
+					gpsData = message[posangle+7:vend]
+					gpsItems = gpsData.split(',')
+					if (len(gpsItems) == 3):
+						changeStateRobot(STATE_ROTATE_TO_ANGLE, float(gpsItems[0]), decimal(gpsItems[0]), decimal(gpsItems[0]))
 		if "moveForward" in message:
 			print ('moveForward vehicle')
 			changeStateRobot(STATE_FREE_CONTROL, 100001)
-			irobotcontroller.driveDirect( 10, 10 )   		# Go straight for two seconds at 10 cm/sec
-			time.sleep( time_sleep )  				  		# Wait X seconds
-			irobotcontroller.driveDirect( 0, 0 )       		# Full stop!
-			if irobotcontroller.bumped(): 
-				irobotcontroller.driveDirect( 0, 0 )	# If the bumper is hit, go backwards
+			irobotcontroller.forward_drone( 5, 5 )			# Velocity, Duration
+			time.sleep( time_sleep )						# Wait X seconds
+			irobotcontroller.stop_drone()					# Full stop!			
 			server.send_message_to_all("moveforward_success")
 		if "moveBackward" in message:
 			print ('moveBackward vehicle')
 			changeStateRobot(STATE_FREE_CONTROL, 100001)
-			irobotcontroller.driveDirect( -10, -10 )		# Go backward for two seconds at 10 cm/sec
-			time.sleep( time_sleep )  						# Wait X seconds
-			irobotcontroller.driveDirect( 0, 0 )       		# Full stop!
-			if irobotcontroller.bumped(): 
-				irobotcontroller.driveDirect( 0, 0 )		# If the bumper is hit, stop
+			irobotcontroller.forward_drone( -5, 5 )			# Velocity, Duration
+			time.sleep( time_sleep )						# Wait X seconds
+			irobotcontroller.stop_drone()					# Full stop!			
 			server.send_message_to_all("movebackward_success")
 		if "turnRight" in message:
-			print ('turnRight vehicle')
 			changeStateRobot(STATE_FREE_CONTROL, 100001)
-			irobotcontroller.driveDirectRot( 0, 10)   	# Slowly turns the robot clockwise.  Right wheel at -5cm/s.  Left wheel at 5cm/s.
-			time.sleep( time_sleep ) 					# Wait X seconds
-			irobotcontroller.driveDirect( 0, 0 )      	# Full stop!
+			irobotcontroller.turn_drone( 10, 2 )		# Degrees, Duration
+			time.sleep( time_sleep )					# Wait X seconds
+			irobotcontroller.stop_drone()				# Full stop!			
 			server.send_message_to_all("turnright_success")
 		if "turnLeft" in message:
-			print ('turnLeft vehicle')
 			changeStateRobot(STATE_FREE_CONTROL, 100001)
-			irobotcontroller.driveDirectRot( 0, -10)	# Slowly turns the robot clockwise.  Right wheel at -5cm/s.  Left wheel at 5cm/s.
-			time.sleep( time_sleep )  					# Wait X seconds
-			irobotcontroller.driveDirect( 0, 0 )		# Full stop!
+			irobotcontroller.turn_drone( -10, 2 )		# Degrees, Duration
+			time.sleep( time_sleep )					# Wait X seconds
+			irobotcontroller.stop_drone()				# Full stop!			
 			server.send_message_to_all("turnleft_success")
 		if "requestDirection" in message:
 			output_send = "requestdirection_success_%1.2f" % g_distanceFromCenter
 			# print (output_send)
 			server.send_message_to_all(output_send)
 		if "genericAction" in message:
-			print ('genericAction')
 			irobotcontroller.beepSound()
 			server.send_message_to_all("genericAction_success")
 		if "stopAction" in message:
 			changeStateRobot(STATE_FREE_CONTROL, 100001)
-			irobotcontroller.driveDirect( 0, 0 )		# Full stop!
+			irobotcontroller.stop_drone()				# Full stop!
 			server.send_message_to_all("stopAction_success")			
 		if "closeCommunication" in message:
 			print ('Close Communication ++START++')
@@ -209,9 +246,83 @@ def message_received(client, server, message):
 			irobotcontroller.closeRobotCommunication()
 			print ('Close Communication ++END++')
 
+##########################################################################
+##########################################################################
+#---------GPSNavigationBehavior
+##########################################################################
+##########################################################################
+
+class GPSNavigationBehavior(object):
+	"""Behavior to find and get close to a colored object"""
+	def __init__(self, interval=1):
+		# Thread
+		self.interval = interval
+
+		thread = threading.Thread(target=self.run, args=())
+		thread.daemon = True                            # Daemonize thread
+		thread.start()   
+
+	def process_control(self):
+		instruction = "start"
+		if instruction == "start":
+			self.running = True
+		elif instruction == "stop":
+			self.running = False
+		elif instruction == "exit":
+			print("Stopping")
+			exit()
+
+	def run(self):
+		global irobotcontroller
+		global g_distanceFromCenter
+		global g_targetAngle
+		global g_targetLatitude
+		global g_targetLongitude
+		global g_reportReachedTarget
+		global g_displayOneTimeMessage
+		global g_previousTimeNow
+		global g_timeAcumToRunAction
+		global g_isRedWaypoint
+		global g_stateRoombaTarget
+		global STATE_IDLE
+		global STATE_ROTATE_TO_ANGLE
+		global STATE_GO_TO_TARGET		
+		global STATE_FREE_CONTROL
+		global g_currentAngle
+		global g_currentIterations
+		global g_checkWhatColor
+
+		print("Setup Complete")
+		# Main loop
+		self.process_control()
+		# ----------------------------------------------
+		if g_stateRoombaTarget == STATE_ROTATE_TO_ANGLE:
+			if g_targetAngle < 100000:
+				# DISPLAY ENTER STATE MESSAGE
+				displayOneTimeMessage("++STATE_GO_TO_ANGLE::GPS(%d,%d)" % (g_targetLatitude,g_targetLongitude))
+				# CALCULATE TIME FOR ACTION
+				calculateDeltaTime()
+				# ONE TIME RUN: GO TO GPS COORDINATES
+				if g_timeAcumToRunAction > 500:
+					irobotcontroller.goto_drone(g_targetLatitude, g_targetLongitude)
+					changeStateRobot(STATE_GO_TO_TARGET, 100001)
+		# ----------------------------------------------
+		if g_stateRoombaTarget == STATE_GO_TO_TARGET:
+			if self.running:
+				# DISPLAY ENTER STATE MESSAGE
+				displayOneTimeMessage("++STATE_GO_TO_TARGET::GPS(%d,%d)" % (g_targetLatitude,g_targetLongitude))
+				# CALCULATE TIME FOR ACTION
+				calculateDeltaTime()
+				# CHECK REACHED GPS COORDINATES
+				if g_timeAcumToRunAction > 1000:
+					g_timeAcumToRunAction = 0
+					if irobotcontroller.is_drone_moving() is False:
+						g_reportReachedTarget = True
+						changeStateRobot(STATE_IDLE, 100001)
 
 initilitzationSystem()
-irobotcontroller = IRobotController()
+irobotcontroller = IDroneController()
+process = start_server_process('color_track_behavior.html')
 server = WebsocketServer(8080, '0.0.0.0')
 server.set_fn_new_client(new_client)
 server.set_fn_message_received(message_received)
