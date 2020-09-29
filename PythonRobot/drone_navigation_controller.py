@@ -158,7 +158,7 @@ def displayOneTimeMessage(messageDisplay):
 def new_client(client, server):
 		global irobotcontroller
 		print("Client connected")
-		irobotcontroller.initiateRobotCommunication()
+		irobotcontroller.connect_vehicle("/dev/ttyAMA0", 57600)
 		changeStateRobot(STATE_IDLE, 100001)
 		server.send_message_to_all("Client connected")
 def message_received(client, server, message):
@@ -245,6 +245,26 @@ def message_received(client, server, message):
 			initilitzationSystem()
 			irobotcontroller.closeRobotCommunication()
 			print ('Close Communication ++END++')
+		if "armAndTakeOff" in message:
+			print ('armAndTakeOff ++START++')
+			initilitzationSystem()
+			beginAltitude = message.find("armAndTakeOff_")+14
+			endAltitude = message.find("_end")
+			finalAltitudeTakeOff = float(message[beginAltitude:endAltitude])
+			irobotcontroller.arm_and_takeoff(finalAltitudeTakeOff)
+			print ('armAndTakeOff ++END++')
+		if "returnHome" in message:
+			print ('returnHome ++START++')
+			initilitzationSystem()
+			irobotcontroller.retun_home_drone()
+			print ('returnHome ++END++')
+		if "disarmDrone" in message:
+			print ('disarmDrone ++START++')
+			initilitzationSystem()
+			irobotcontroller.disarm_drone()
+			time.sleep( 5 )
+			irobotcontroller.close_drone()
+			print ('disarmDrone ++END++')
 
 ##########################################################################
 ##########################################################################

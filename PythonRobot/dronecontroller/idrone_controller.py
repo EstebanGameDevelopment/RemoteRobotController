@@ -7,23 +7,34 @@ class IDroneController(object):
 	"""
 	connect_vehicle	
 	"""
-	def connect_vehicle(self, connection_string):
+	def connect_vehicle(self, connection_string, baud_comms):
 		# Connect to the Vehicle
 		print('Connecting to vehicle on: %s' % connection_string)
-		self.vehicle = connect(connection_string, wait_ready=True)
+		self.vehicle = connect(connection_string, baud = baud_comms, wait_ready=True)
 		self.ismoving = False;
+		self.vehicle.wait_ready('autopilot_version')
+		print('::Autopilot Version: %s' % self.vehicle.version)
 
-        # Register observers
-        self.vehicle.add_attribute_listener('location', self.location_callback)
+		# Register observers
+		# self.vehicle.add_attribute_listener('location', self.location_callback)
 
+	def get_vehicle_stats(self):
+		print "Get some vehicle attribute values:"
+		print " GPS: %s" % self.vehicle.gps_0
+		print " Battery: %s" % self.vehicle.battery
+		print " Last Heartbeat: %s" % self.vehicle.last_heartbeat
+		print " Is Armable?: %s" % self.vehicle.is_armable
+		print " System status: %s" % self.vehicle.system_status.state
+		print " Mode: %s" % self.vehicle.mode.name    # settable
+		
 	"""
 	location_callback	
 	"""
-    def location_callback(self, vehicle, name, location):
-        if location.global_relative_frame.alt is not None:
-            self.altitude = location.global_relative_frame.alt
+	def location_callback(self, vehicle, name, location):
+		if location.global_relative_frame.alt is not None:
+			self.altitude = location.global_relative_frame.alt
 
-        self.current_location = location.global_relative_frame
+		self.current_location = location.global_relative_frame
 		self.ismoving = False;
 		print("Finished go to GPS coordinates")
 
@@ -36,7 +47,7 @@ class IDroneController(object):
 	"""
 	arm_and_takeoff	
 	"""
-	def arm_and_takeoff(aTargetAltitude):
+	def arm_and_takeoff(self, aTargetAltitude):
 		"""
 		Arms vehicle and fly to aTargetAltitude.
 		"""
@@ -56,17 +67,18 @@ class IDroneController(object):
 			print(" Waiting for arming...")
 			time.sleep(1)
 
-		print("Taking off!")
-		self.vehicle.simple_takeoff(aTargetAltitude) # Take off to target altitude
+		# print("Taking off!")
+		print("Armed and ready to take off!! altitude ", aTargetAltitude)
+		#self.vehicle.simple_takeoff(aTargetAltitude) # Take off to target altitude
 
 		# Wait until the vehicle reaches a safe height before processing the goto (otherwise the command 
 		#  after Vehicle.simple_takeoff will execute immediately).
-		while True:
-			print(" Altitude: ", self.vehicle.location.global_relative_frame.alt)      
-			if self.vehicle.location.global_relative_frame.alt>=aTargetAltitude*0.95: #Trigger just below target alt.
-				print("Reached target altitude")
-				break
-			time.sleep(1)
+		#while True:
+			#print(" Altitude: ", self.vehicle.location.global_relative_frame.alt)      
+			#if self.vehicle.location.global_relative_frame.alt>=aTargetAltitude*0.95: #Trigger just below target alt.
+				#print("Reached target altitude")
+				#break
+			#time.sleep(1)
 
 
 	"""
@@ -96,6 +108,7 @@ class IDroneController(object):
 		For more information see: 
 		http://copter.ardupilot.com/wiki/common-mavlink-mission-command-messages-mav_cmd/#mav_cmd_condition_yaw
 		"""
+		print ("condition_yaw ", heading)
 		if relative:
 			is_relative = 1 #yaw relative to direction of travel
 		else:
@@ -285,7 +298,7 @@ class IDroneController(object):
 
 
 
-	def goto(self, dNorth, dEast, gotoFunction=self.vehicle.simple_goto):
+	def goto(self, dNorth, dEast):
 		"""
 		Moves the vehicle to a position dNorth metres North and dEast metres East of the current position.
 
@@ -299,7 +312,7 @@ class IDroneController(object):
 		currentLocation = self.vehicle.location.global_relative_frame
 		targetLocation = self.get_location_metres(currentLocation, dNorth, dEast)
 		targetDistance = self.get_distance_metres(currentLocation, targetLocation)
-		gotoFunction(targetLocation)
+		self.vehicle.simple_goto(targetLocation)
 		
 		#print "DEBUG: targetLocation: %s" % targetLocation
 		#print "DEBUG: targetLocation: %s" % targetDistance
@@ -343,6 +356,7 @@ class IDroneController(object):
 		See the above link for information on the type_mask (0=enable, 1=ignore). 
 		At time of writing, acceleration and yaw bits are ignored.
 		"""
+		print ("Velocity ", velocity_x, velocity_y, velocity_z, duration)
 		msg = self.vehicle.message_factory.set_position_target_local_ned_encode(
 			0,       # time_boot_ms (not used)
 			0, 0,    # target system, target component
@@ -401,7 +415,7 @@ class IDroneController(object):
 	turn_drone	
 	"""
 	def turn_drone(self, degrees, duration):
-		currHeading = vehicle.heading
+		currHeading = self.vehicle.heading
 		currHeading = currHeading + degrees 
 		self.condition_yaw(currHeading)
 
@@ -424,5 +438,22 @@ class IDroneController(object):
 		self.ismoving = True;
 		self.vehicle.simple_goto(LocationGlobal(latitude,longitude))
 		# self.goto_position_target_global_int(LocationGlobal(latitude,longitude))
-		
-		
+
+	"""
+	retun_home_drone	
+	"""
+	def retun_home_drone(self):
+		self.vehicle.mode = VehicleMode("RTL")
+		self.get_vehicle_stats()
+
+	"""
+	disarm_drone	
+	"""
+	def disarm_drone(self):
+		self.vehicle.armed = False
+
+	"""
+	close_drone	
+	"""
+	def close_drone(self):
+		self.vehicle.close()
